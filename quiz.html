@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Quiz Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #dc2626 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .quiz-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #dc2626;
+        }
+
+        .quiz-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .progress-container {
+            background: #f8fafc;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #2563eb, #dc2626);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .quiz-content {
+            padding: 40px 30px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+        }
+
+        .welcome-screen h2 {
+            color: #1e293b;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .welcome-screen p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question {
+            color: #1e293b;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .answers {
+            display: grid;
+            gap: 15px;
+        }
+
+        .answer {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .answer:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            transform: translateY(-2px);
+        }
+
+        .answer.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .answer.correct {
+            border-color: #059669;
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .answer.incorrect {
+            border-color: #dc2626;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #dc2626);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .results-title {
+            color: #1e293b;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .results-subtitle {
+            color: #64748b;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .score-breakdown {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .score-item:last-child {
+            margin-bottom: 0;
+            padding-top: 10px;
+            border-top: 2px solid #e2e8f0;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-title {
+                font-size: 2rem;
+            }
+            
+            .quiz-content {
+                padding: 30px 20px;
+            }
+            
+            .question {
+                font-size: 1.2rem;
+            }
+            
+            .quiz-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1 class="quiz-title">Coding Quiz Challenge</h1>
+            <p class="quiz-subtitle">Test your programming knowledge</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="questionCounter">Question 1 of 10</span>
+                <span id="scoreDisplay">Score: 0</span>
+            </div>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <h2>Welcome to the Coding Quiz!</h2>
+                <p>Test your programming knowledge with 10 challenging questions covering various programming concepts, languages, and best practices.</p>
+                <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question Container -->
+            <div class="question-container" id="questionContainer">
+                <div class="question" id="questionText"></div>
+                <div class="answers" id="answersContainer"></div>
+                <div class="quiz-actions">
+                    <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" style="display: none;">Previous</button>
+                    <button class="btn" onclick="nextQuestion()" id="nextBtn" disabled>Next Question</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <div class="score-circle" id="finalScore">0%</div>
+                <h2 class="results-title" id="resultsTitle">Quiz Complete!</h2>
+                <p class="results-subtitle" id="resultsSubtitle">Here's how you performed</p>
+                <div class="score-breakdown">
+                    <div class="score-item">
+                        <span>Correct Answers:</span>
+                        <span id="correctCount">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Incorrect Answers:</span>
+                        <span id="incorrectCount">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Total Questions:</span>
+                        <span id="totalCount">10</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Final Score:</span>
+                        <span id="finalPercentage">0%</span>
+                    </div>
+                </div>
+                <button class="btn" onclick="restartQuiz()">Take Quiz Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which of the following is NOT a primitive data type in JavaScript?",
+                answers: ["string", "boolean", "array", "number"],
+                correct: 2
+            },
+            {
+                question: "What does CSS stand for?",
+                answers: ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style Sheets", "Colorful Style Sheets"],
+                correct: 1
+            },
+            {
+                question: "Which method is used to add an element to the end of an array in JavaScript?",
+                answers: ["append()", "push()", "add()", "insert()"],
+                correct: 1
+            },
+            {
+                question: "What is the correct way to declare a variable in Python?",
+                answers: ["var x = 5", "let x = 5", "x = 5", "int x = 5"],
+                correct: 2
+            },
+            {
+                question: "Which HTML tag is used to create a hyperlink?",
+                answers: ["<link>", "<href>", "<a>", "<url>"],
+                correct: 2
+            },
+            {
+                question: "What does API stand for?",
+                answers: ["Application Programming Interface", "Advanced Programming Interface", "Application Process Interface", "Automated Programming Interface"],
+                correct: 0
+            },
+            {
+                question: "Which of the following is a version control system?",
+                answers: ["Git", "HTML", "CSS", "JavaScript"],
+                correct: 0
+            },
+            {
+                question: "What is the time complexity of binary search?",
+                answers: ["O(n)", "O(log n)", "O(n²)", "O(1)"],
+                correct: 1
+            },
+            {
+                question: "Which keyword is used to define a function in Python?",
+                answers: ["function", "def", "func", "define"],
+                correct: 1
+            },
+            {
+                question: "What does SQL stand for?",
+                answers: ["Structured Query Language", "Simple Query Language", "Standard Query Language", "System Query Language"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = null;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('questionContainer').classList.add('active');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer';
+                answerDiv.textContent = answer;
+                answerDiv.onclick = () => selectAnswer(index);
+                answersContainer.appendChild(answerDiv);
+            });
+            
+            updateProgress();
+            updateButtons();
+            selectedAnswer = null;
+        }
+
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach((answer, i) => {
+                answer.classList.remove('selected');
+                if (i === index) {
+                    answer.classList.add('selected');
+                }
+            });
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === null) return;
+            
+            userAnswers[currentQuestion] = selectedAnswer;
+            
+            // Show correct answer
+            const answers = document.querySelectorAll('.answer');
+            const correctIndex = questions[currentQuestion].correct;
+            
+            answers.forEach((answer, index) => {
+                if (index === correctIndex) {
+                    answer.classList.add('correct');
+                } else if (index === selectedAnswer && selectedAnswer !== correctIndex) {
+                    answer.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedAnswer === correctIndex) {
+                score++;
+            }
+            
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                selectedAnswer = userAnswers[currentQuestion] || null;
+                loadQuestion();
+                if (selectedAnswer !== null) {
+                    const answers = document.querySelectorAll('.answer');
+                    answers[selectedAnswer].classList.add('selected');
+                    document.getElementById('nextBtn').disabled = false;
+                }
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
+        }
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentQuestion === 0) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+            }
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Finish Quiz';
+            } else {
+                nextBtn.textContent = 'Next Question';
+            }
+            
+            nextBtn.disabled = selectedAnswer === null;
+        }
+
+        function showResults() {
+            document.getElementById('questionContainer').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+            
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = percentage + '%';
+            document.getElementById('finalPercentage').textContent = percentage + '%';
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('incorrectCount').textContent = questions.length - score;
+            document.getElementById('totalCount').textContent = questions.length;
+            
+            let title, subtitle;
+            if (percentage >= 90) {
+                title = "Excellent!";
+                subtitle = "You're a coding master!";
+            } else if (percentage >= 70) {
+                title = "Great Job!";
+                subtitle = "You have solid programming knowledge!";
+            } else if (percentage >= 50) {
+                title = "Good Effort!";
+                subtitle = "Keep learning and practicing!";
+            } else {
+                title = "Keep Learning!";
+                subtitle = "Practice makes perfect!";
+            }
+            
+            document.getElementById('resultsTitle').textContent = title;
+            document.getElementById('resultsSubtitle').textContent = subtitle;
+            
+            // Update progress to 100%
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('questionCounter').textContent = `Completed`;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            userAnswers = [];
+            
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('welcomeScreen').style.display = 'block';
+            
+            // Reset progress
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('questionCounter').textContent = 'Question 1 of 10';
+            document.getElementById('scoreDisplay').textContent = 'Score: 0';
+        }
+    </script>
+</body>
+</html>
