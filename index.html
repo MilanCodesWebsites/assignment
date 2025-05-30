@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Prince's Projects Homepage</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #34495e;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2c3e50, #95a5a6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.2rem 2.5rem;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+            justify-content: center;
+            border: 2px solid transparent;
+        }
+
+        .portfolio-btn {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            box-shadow: 0 8px 25px rgba(149, 165, 166, 0.3);
+        }
+
+        .portfolio-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(149, 165, 166, 0.4);
+            background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+        }
+
+        .quiz-btn {
+            background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+            color: white;
+            box-shadow: 0 8px 25px rgba(189, 195, 199, 0.3);
+        }
+
+        .quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(189, 195, 199, 0.4);
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+        }
+
+        .icon {
+            font-size: 1.3rem;
+            display: inline-block;
+        }
+
+        .portfolio-icon::before {
+            content: "📁";
+        }
+
+        .quiz-icon::before {
+            content: "🧠";
+        }
+
+        .features {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(189, 195, 199, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .feature p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .nav-button {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                margin-top: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .nav-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Accessibility improvements */
+        .nav-button:focus {
+            outline: 3px solid #3498db;
+            outline-offset: 2px;
+        }
+
+        .nav-button:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* Animation for page load */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">S</div>
+            <h1>Welcome</h1>
+            <p class="subtitle">Discover my work and test your knowledge with interactive experiences</p>
+        </header>
+
+        <nav class="buttons-container">
+            <a href="portfolio.html" class="nav-button portfolio-btn" aria-label="View my portfolio">
+                <span class="icon portfolio-icon"></span>
+                <span>View Portfolio</span>
+            </a>
+            <a href="quiz.html" class="nav-button quiz-btn" aria-label="Take the quiz">
+                <span class="icon quiz-icon"></span>
+                <span>Take Quiz</span>
+            </a>
+        </nav>
+
+        <section class="features">
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Creative Portfolio</h3>
+                <p>Explore a curated collection of my latest projects, designs, and creative work showcasing skills and expertise.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Interactive Quiz</h3>
+                <p>Challenge yourself with engaging questions designed to test your knowledge and provide an entertaining experience.</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
